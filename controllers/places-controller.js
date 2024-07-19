@@ -4,8 +4,6 @@ const PLACE_MODEL = require("../models/places");
 
 const USER_MODEL = require("../models/users");
 
-const claudinary =require('cloudinary');
-
 const { validationResult } = require("express-validator");
 
 const claudinary =require('cloudinary').v2;
