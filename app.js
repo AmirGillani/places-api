@@ -20,7 +20,7 @@ const app = express();
 
 // CALL BODYPARSER API
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 // THIS WILL BE CALLED WHEN FRONT END SEARCH FOR /UPLOADS/IMAGES IN IMAGE TAGS
 
