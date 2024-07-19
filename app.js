@@ -12,6 +12,8 @@ const userRoute = require("./routes/user-routes.js");
 
 const HttpsErrors = require("./models/https-errors");
 
+const claudinary = require('cloudinary') ;
+
 const fs = require("fs");
 
 const path = require("path");
@@ -75,6 +77,12 @@ app.use(function (error, req, res, next) {
   }
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred!" });
+});
+
+claudinary.v2.config({ 
+  cloud_name: 'dhh9j0ion', 
+  api_key: '488515883499643', 
+  api_secret: 'yLs10KBBnvph_RhhRkE7tY8oymk' 
 });
 
 mongoose
