@@ -83,7 +83,7 @@ async function createPlace(req, res, next) {
   const newPost = new PLACE_MODEL({
     title: title,
     description: description,
-    img: uploadResult.secure_url,,
+    img: uploadResult.secure_url,
     location: location,
     coordinates: {
       lat: 48.8674,
