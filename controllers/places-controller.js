@@ -4,6 +4,8 @@ const PLACE_MODEL = require("../models/places");
 
 const USER_MODEL = require("../models/users");
 
+const claudinary =require('cloudinary');
+
 const { validationResult } = require("express-validator");
 
 const mongoose = require("mongoose");
@@ -83,6 +85,17 @@ async function foundUserPlaces(req, res, next) {
 async function createPlace(req, res, next) {
   const result = validationResult(req);
 
+  // Upload an image
+   const uploadResult = await claudinary.v2.uploader
+   .upload(
+    req.body.image, {
+           public_id: uuid(),
+       }
+   )
+   .catch((error) => {
+       console.log(error);
+   });
+
   if (!result.isEmpty()) {
     throw new HttpsErrors("Validation Error", 403);
   }
@@ -94,7 +107,7 @@ async function createPlace(req, res, next) {
   const newPost = new PLACE_MODEL({
     title: title,
     description: description,
-    img: req.file.path,
+    img: uploadResult.secure_url,
     location: location,
     coordinates: {
       lat: 48.8674,
