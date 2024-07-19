@@ -8,38 +8,13 @@ const claudinary =require('cloudinary');
 
 const { validationResult } = require("express-validator");
 
+const claudinary =require('cloudinary').v2;
+
 const mongoose = require("mongoose");
 
 const fs = require("fs");
 
 const uuid = require("uuid");
-
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Disney Land",
-    description: "Best place on planet Earth",
-    location: "Paris",
-    coordinates: { lat: 48.8674, lng: -2.7836 },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Disney Land",
-    description: "Best place on planet Earth",
-    location: "Paris",
-    coordinates: { lat: 48.8674, lng: -2.7836 },
-    creator: "u2",
-  },
-  {
-    id: "p2",
-    title: "Disney Land",
-    description: "Best place on planet Earth",
-    location: "Paris",
-    coordinates: { lat: 48.8674, lng: -2.7836 },
-    creator: "u2",
-  },
-];
 
 function Home(req, res) {
   res.json({ routes: "home" });
@@ -85,16 +60,19 @@ async function foundUserPlaces(req, res, next) {
 async function createPlace(req, res, next) {
   const result = validationResult(req);
 
-  // Upload an image
-   const uploadResult = await claudinary.v2.uploader
-   .upload(
-    req.body.image, {
-           public_id: uuid(),
-       }
-   )
-   .catch((error) => {
-       console.log(error);
-   });
+  let uploadResult='';
+
+  try {
+
+    // Upload an image
+    uploadResult = await claudinary.uploader
+   .upload(req.file.path);
+    
+  } catch (error) {
+   
+     // throw error;
+     return next(error);
+  }
 
   if (!result.isEmpty()) {
     throw new HttpsErrors("Validation Error", 403);
@@ -107,7 +85,7 @@ async function createPlace(req, res, next) {
   const newPost = new PLACE_MODEL({
     title: title,
     description: description,
-    img: uploadResult.secure_url,
+    img: uploadResult.secure_url,,
     location: location,
     coordinates: {
       lat: 48.8674,
