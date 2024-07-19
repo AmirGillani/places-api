@@ -1,6 +1,6 @@
 const express = require("express");
 
-const fileUpload = require("../middlewares/file-upload");
+const multer = require('multer');
 
 // IMPORT CHECK METHOD
 const { check } = require("express-validator");
@@ -25,12 +25,17 @@ route.get("/user/:userid", placeControler.foundUserPlaces);
 
 route.use(checkAuth);
 
+// Multer configuration
+const storage = multer.diskStorage({});
+
+const upload = multer({ storage });
+
 
 //APPLY CHECK METHOD FOR VALIDATION
 
 //check('title').not().isEmpty(), check("description").isLength({ min: 5 })
 route.post(
-  "/",fileUpload.single("image"),
+  "/",upload.single("image"),
   [check('title').not().isEmpty(), check("description").isLength({ min: 5 })],
   placeControler.createPlace
 );
