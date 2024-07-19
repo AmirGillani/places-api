@@ -11,6 +11,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Home = async (req, res) => {
+
   // PASSWORDS WILL NOT BE FETCHED
 
   const users = await USER_MODEL.find({}, { password: 0 });
@@ -22,8 +23,15 @@ const Home = async (req, res) => {
   });
 };
 
+//SIGNUP USER
+
 const createUser = async (req, res, next) => {
+
+  //CHECK EXPRESS VALIDATIONS
+
   const result = validationResult(req);
+
+  //IF VALIDATIONS ARE INVALID THROW ERROR
 
   if (!result.isEmpty()) {
     throw new HttpsError("Validation Error", 403);
@@ -32,6 +40,8 @@ const createUser = async (req, res, next) => {
   const { name, email, password, places } = req.body;
 
   let foundUser;
+
+  //CHECK IF USER ALREADY EXISTS
 
   try {
     foundUser = await USER_MODEL.findOne({ email: email });
@@ -45,6 +55,8 @@ const createUser = async (req, res, next) => {
   }
 
   let hashPassword;
+
+  //CONVERT PASSWORD TO HASH
 
   try {
     hashPassword = await bcrypt.hash(password, 12);
@@ -64,9 +76,13 @@ const createUser = async (req, res, next) => {
     places: places,
   });
 
+  //CREATE NEW USER
+
   try {
     newUser.save();
   } catch (err) {}
+
+  //CREATE TOKEN
 
   let token;
 
@@ -76,11 +92,14 @@ const createUser = async (req, res, next) => {
       "supersecret_dont_share",
       { expiresIn: "1h" }
     );
-  } catch (err) {
+  } catch (err) 
+  {
     const error = new HttpsError("Signup failed try again later !!", 500);
 
     return next(error);
-  }
+  };
+
+  console.log(token, newUser)
 
   res
     .status(201)
