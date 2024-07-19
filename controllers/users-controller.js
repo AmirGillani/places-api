@@ -8,6 +8,8 @@ const HttpsErrors = require("../models/https-errors");
 
 const bcrypt = require("bcryptjs");
 
+const claudinary =require('cloudinary').v2;
+
 const jwt = require("jsonwebtoken");
 
 const Home = async (req, res) => {
@@ -30,6 +32,20 @@ const createUser = async (req, res, next) => {
   //CHECK EXPRESS VALIDATIONS
 
   const result = validationResult(req);
+
+  let uploadResult='';
+
+  try {
+
+    // Upload an image
+    uploadResult = await claudinary.uploader
+   .upload(req.file.path);
+    
+  } catch (error) {
+   
+     // throw error;
+     return next(error);
+  }
 
   //IF VALIDATIONS ARE INVALID THROW ERROR
 
@@ -71,7 +87,7 @@ const createUser = async (req, res, next) => {
     email: email,
 
     // REQ.FILE.PATH VALUE EQUALS TO UPLOADS/IMAGES/IMAGNAME.JPG
-    image: req.file.path,
+    image: uploadResult.secure_url,
     password: hashPassword,
     places: places,
   });
