@@ -28,9 +28,9 @@ app.use(cors());
 
 // CALL BODYPARSER API
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
-app.use(express.urlencoded());
+app.use(express.json());
 
 //OTHER OPTIONS FOR CORS
 
