@@ -18,10 +18,6 @@ const path = require("path");
 
 const app = express();
 
-// CALL BODYPARSER API
-
-// app.use(bodyParser.json());
-
 // THIS WILL BE CALLED WHEN FRONT END SEARCH FOR /UPLOADS/IMAGES IN IMAGE TAGS
 
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
@@ -30,7 +26,11 @@ app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use(cors());
 
-app.use(express.json());
+// CALL BODYPARSER API
+
+app.use(bodyParser.json());
+
+app.use(express.urlencoded());
 
 //OTHER OPTIONS FOR CORS
 
