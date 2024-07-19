@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 
 const mongoose = require("mongoose");
 
+const cloudinary= require("cloudinary").v2;
+
 const cors = require("cors");
 
 const placeRoute = require("./routes/place-routes.js");
@@ -79,7 +81,9 @@ app.use(function (error, req, res, next) {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-claudinary.v2.config({ 
+// CLAUDINARY CONFIGURATION
+
+cloudinary.config({ 
   cloud_name: 'dhh9j0ion', 
   api_key: '488515883499643', 
   api_secret: 'yLs10KBBnvph_RhhRkE7tY8oymk' 
